@@ -1,0 +1,14 @@
+{
+  "languageserver": {
+    "haskell": {
+      "command": "ghcide-wrapper",
+      "args": [],
+      "filetypes": ["haskell", "hs", "lhs"],
+      "rootPatterns": ["cabal.project", "stack.yaml"],
+      "initializationOptions": {
+        "languageServerHaskell": {
+        }
+      }
+    }
+  }
+}
