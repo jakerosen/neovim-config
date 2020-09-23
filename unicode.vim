@@ -1442,3 +1442,94 @@ inoremap <C-U>[9 𝟡
 " U+1F880  🢀 🢁 🢂 🢃 🢄 🢇
 " U+1F890  🢐 🢑 🢒 🢓 🢔 🢕 🢖 🢗 🢘 🢙 🢚 🢛
 " U+1F8A0  🢠 🢡 🢢 🢣 🢤 🢥 🢦 🢧 🢨 🢩 🢪 🢫
+"
+"
+"
+"
+" ------------------------------------------------------------------------------
+" Abbreviations
+" ------------------------------------------------------------------------------
+"  These abbreviations are a now defunct old way of accessing certain unicode
+"  characters
+
+" ia zalpha α
+" ia zbeta β
+" ia zchi χ
+" ia zdelta δ
+" ia zepsilon ε
+" ia zeta η
+" ia zgamma γ
+" ia ziota ι
+" ia zkappa κ
+" ia zlambda λ
+" ia zmu μ
+" ia znu ν
+" ia zomega ω
+" ia zphi φ
+" ia zpi π
+" ia zpsi ψ
+" ia zrho ρ
+" ia zsigma σ
+" ia ztau τ
+" ia ztheta θ
+" ia zupsilon υ
+" ia zxi ξ
+" ia zzeta ζ
+
+" ia zDelta Δ
+" ia zGamma Γ
+" ia zLambda Λ
+" ia zOmega Ω
+" ia zPhi Φ
+" ia zPi Π
+" ia zPsi Ψ
+" ia zSigma Σ
+" ia zTheta Θ
+" ia zXi Ξ
+
+" ia zforall ∀
+" ia zexists ∃
+" ia zbottom ⊥
+
+" ia zA 𝔸
+" ia zB 𝔹
+" ia zC ℂ
+" ia zD 𝔻
+" ia zE 𝔼
+" ia zF 𝔽
+" ia zG 𝔾
+" ia zH ℍ
+" ia zI 𝕀
+" ia zJ 𝕁
+" ia zK 𝕂
+" ia zL 𝕃
+" ia zM 𝕄
+" ia zN ℕ
+" ia zO 𝕆
+" ia zP ℙ
+" ia zQ ℚ
+" ia zR ℝ
+" ia zS 𝕊
+" ia zT 𝕋
+" ia zU 𝕌
+" ia zV 𝕍
+" ia zW 𝕎
+" ia zX 𝕏
+" ia zY 𝕐
+" ia zZ ℤ
+" ia zzgamma ℽ
+" ia zzGamma ℾ
+" ia zzpi ℼ
+" ia zzPi ℿ
+
+" ia zeq ≡
+" ia zne ≠
+" ia zle ≤
+" ia zge ≥
+" ia zdot ∘
+" ia znot ¬
+" ia zand ∧
+" ia zor ∨
+" ia zempty ∅
+" ia zunion ∪
+" ia zintersect ∩
