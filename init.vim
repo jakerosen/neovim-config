@@ -20,7 +20,6 @@ Plug 'neovimhaskell/haskell-vim'
 Plug 'ElmCast/elm-vim', { 'for': 'elm' }
 
 " to organize
-" Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular'
 
 " Highlight yanks
@@ -56,9 +55,6 @@ Plug 'mhinz/vim-startify'
 " Remove highlighting when the cursor moves
 Plug 'romainl/vim-cool'
 
-" Renders a color pip when a hex code is encountered
-Plug 'rrethy/vim-hexokinase'
-
 " Highlights other copies of the word name that your cursor is over
 Plug 'rrethy/vim-illuminate'
 
@@ -67,6 +63,11 @@ Plug 'tpope/vim-characterize'
 
 " git blame in line
 Plug 'rhysd/git-messenger.vim'
+
+" JSX plugins for syntax highlighting and indentation
+" Plugin 'pangloss/vim-javascript'
+" Plugin 'mxw/vim-jsx'
+Plug 'maxmellon/vim-jsx-pretty'
 
 call plug#end()
 
@@ -515,7 +516,7 @@ nn <silent> <Enter> :call <SID>HandleEnter()<CR>
 " " Briefly highlight yanks
 " autocmd jakerosen TextYankPost * silent! lua vim.highlight.on_yank {higroup="Visual", timeout=600}
 
-source unicode.vim
+source /home/jake/.config/nvim/unicode.vim
 
 " inner/around number text objects (with forward-seeking behavior)
 " 123 123.456 0b1010 0xff
