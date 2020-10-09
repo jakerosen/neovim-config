@@ -5,6 +5,11 @@
 "       ▼  Controls and Latin-1 Suppl.
 "  U+00A0    ¡ ¢ £ ¤ ¥ ¦ § ¨ © ª « ¬ ­ ® ¯
 
+" default imapping for <C-u> is undo... we do NOT want that or failure to input
+" a unicode mapping in time will result in undoing everything that was just
+" typed!
+imap <C-u> <Nop>
+
 inoremap <C-u>! ¡
 inoremap <C-u>cent ¢
 inoremap <C-u>pound £
