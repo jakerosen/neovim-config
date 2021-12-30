@@ -1,8 +1,8 @@
 {
   "languageserver": {
     "haskell": {
-      "command": "ghcide-wrapper",
-      "args": [],
+      "command": "haskell-language-server-wrapper",
+      "args": ["--lsp"],
       "filetypes": ["haskell", "hs", "lhs"],
       "rootPatterns": ["cabal.project", "stack.yaml"],
       "initializationOptions": {

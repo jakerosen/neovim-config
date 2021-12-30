@@ -35,7 +35,7 @@ Plug 'terryma/vim-multiple-cursors'
 Plug 'tommcdo/vim-exchange'
 
 " Ghcide
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
 " highlight instances of characters when you use f
 Plug 'unblevable/quick-scope'
@@ -69,7 +69,63 @@ Plug 'rhysd/git-messenger.vim'
 " Plugin 'mxw/vim-jsx'
 Plug 'maxmellon/vim-jsx-pretty'
 
+" Ormolu
+" Plug 'sdiehl/vim-ormolu', {'commit':'edbeb0135692345b088182963e9b229fe2235ac0'}
+
+" language server config
+Plug 'neovim/nvim-lspconfig'
+
+" lsp autocomplete
+Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+
 call plug#end()
+
+let g:coq_settings = { 'auto_start': 'shut-up' }
+
+
+" LSP require
+lua << EOF
+local nvim_lsp = require('lspconfig')
+local coq = require "coq" -- add this
+
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', '<CR>', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', '<space>p', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+
+end
+
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+-- nvim_lsp['hls'].setup(coq.lsp_ensure_capabilities({
+nvim_lsp['hls'].setup(({
+  settings = {
+    haskell = {
+      plugin = {
+        hlint = {
+          globalOn = false
+        }
+      }
+    }
+  },
+  on_attach = on_attach,
+}))
+
+EOF
 
 " ------------------------------------------------------------------------------
 " Basic settings
@@ -77,7 +133,7 @@ call plug#end()
 " These are set by vim-plug
 " syntax on
 " filetype plugin indent off
-
+filetype plugin indent on
 
 " Colors
 " [base16]
@@ -103,9 +159,12 @@ set shiftwidth=2 " shift width of 2
 set shiftround " shifts to multiples of shift setting
 
 " Indentation
-set smartindent
+" set smartindent
 set list " show notable whitespace
 set linebreak " wrap whole word on line break
+
+" Text width wrap
+set textwidth=80
 
 " Search
 set ignorecase " ignore case on search
@@ -241,9 +300,12 @@ nn <C-f> <C-i>
 " Make visual mode * work like normal mode *
 vnoremap * y/<C-R>"<Enter>
 
+" fix single quote
+nnoremap ' `
+
 " Space-p to format Haskell code
-au FileType haskell nn <buffer> <silent> <Space>p m`!ipormolu<CR>``
-au FileType haskell vn <buffer> <silent> <Space>p m`!ormolu<CR>``
+" au FileType haskell nn <buffer> <silent> <Space>p m`:!ormolu -i %<CR>``
+" au FileType haskell vn <buffer> <silent> <Space>p m`!ormolu<CR>``
 
 " repld mitchell
 nn <silent> <Space>s m`vip<Esc>:silent '<,'>w !repld-send<CR>``
@@ -381,13 +443,13 @@ endfun
 " endfunction
 
 " [coc-nvim]
-function! s:HandleEnter()
- if coc#util#has_float()
-   call coc#util#float_hide()
- else
-   call CocAction('doHover')
- endif
-endfunction
+" function! s:HandleEnter()
+"  if coc#util#has_float()
+"    call coc#util#float_hide()
+"  else
+"    call CocAction('doHover')
+"  endif
+" endfunction
 
 " ------------------------------------------------------------------------------
 " Autocommands
@@ -397,6 +459,9 @@ autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "norm
 
 " Strip trailing whitespace on save
 autocmd BufWritePre * :call <SID>StripTrailingWhitespace()
+
+" Format Haskell files on save
+autocmd BufWritePre *.hs lua vim.lsp.buf.formatting_sync(nil, 1000)
 
 " ------------------------------------------------------------------------------
 " Filetype specific settings
@@ -425,6 +490,9 @@ au FileType php setlocal commentstring=//\ %s
 
 " mips commentary
 au FileType asm setlocal commentstring=#\ %s
+
+" mysql commentary
+au FileType sql setlocal commentstring=--\ %s
 
 
 " ------------------------------------------------------------------------------
@@ -510,6 +578,36 @@ nn <silent> <Enter> :call <SID>HandleEnter()<CR>
 " " Backspace to open all warnings/errors in a list
 " nn <silent> <BS> :CocList diagnostics<CR>
 
+
+" [lightline]
+let g:lightline = {}
+let g:lightline.active = {}
+let g:lightline.active.left = [ [ 'mode', 'paste' ], [ 'branch' ] ]
+let g:lightline.active.right = [ [ 'lineinfo' ], [ 'percent' ], [ 'filetype' ], [ 'lsp' ] ]
+" let g:lightline.colorscheme = 'gruvbox'
+let g:lightline.component_expand = {}
+let g:lightline.component_expand.buffers = 'lightline#bufferline#buffers'
+let g:lightline.component_function = {}
+let g:lightline.component_function.branch = 'FugitiveHead'
+let g:lightline.component_function.filename = 'LightlineFilename'
+let g:lightline.component_function.lsp = 'LightlineLspStatus'
+let g:lightline.component_type = {}
+let g:lightline.component_type.buffers = 'tabsel'
+let g:lightline.mode_map = {
+      \ 'c': '𝒸ℴ𝓂𝓂𝒶𝓃𝒹',
+      \ 'i': '𝒾𝓃𝓈ℯ𝓇𝓉',
+      \ 'n': '𝓃ℴ𝓇𝓂𝒶ℓ',
+      \ 'R': '𝓇ℯ𝓅ℓ𝒶𝒸ℯ',
+      \ 'v': '𝓋𝒾𝓈𝓊𝒶ℓ',
+      \ 'V': '𝓋𝒾𝓈𝓊𝒶ℓ–ℓ𝒾𝓃ℯ',
+      \ "\<C-v>": '𝓋𝒾𝓈𝓊𝒶ℓ–𝒷ℓℴ𝒸𝓀',
+      \ }
+let g:lightline.tab = {}
+let g:lightline.tab.active = [ 'tabnum', 'filename', 'modified' ]
+let g:lightline.tab.inactive = [ 'tabnum', 'filename', 'modified' ]
+let g:lightline.tabline = {}
+let g:lightline.tabline.left = [ [ 'buffers' ] ]
+let g:lightline.tabline.right = [ [ ] ]
 
 
 """""""""""""""""""""'''
