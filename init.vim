@@ -56,7 +56,7 @@ Plug 'mhinz/vim-startify'
 Plug 'romainl/vim-cool'
 
 " Highlights other copies of the word name that your cursor is over
-Plug 'rrethy/vim-illuminate'
+" Plug 'rrethy/vim-illuminate'
 
 " improves ga functionality (shows character information)
 Plug 'tpope/vim-characterize'
@@ -75,57 +75,22 @@ Plug 'maxmellon/vim-jsx-pretty'
 " language server config
 Plug 'neovim/nvim-lspconfig'
 
+" Fennel plugin
+Plug 'bakpakin/fennel.vim', { 'for': 'fennel' }
+
+" LSP status
+Plug 'nvim-lua/lsp-status.nvim'
+
 " lsp autocomplete
-Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+Plug 'hrsh7th/cmp-nvim-lsp', { 'branch': 'main' }
+Plug 'hrsh7th/nvim-cmp', { 'branch': 'main' }
+Plug 'hrsh7th/cmp-vsnip', { 'branch': 'main' }
+Plug 'hrsh7th/vim-vsnip', { 'branch': 'main' }
 
 call plug#end()
 
-let g:coq_settings = { 'auto_start': 'shut-up' }
-
-
-" LSP require
-lua << EOF
-local nvim_lsp = require('lspconfig')
-local coq = require "coq" -- add this
-
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-  -- Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  local opts = { noremap=true, silent=true }
-
-  -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', '<CR>', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', '<space>p', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-
-end
-
-
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
--- nvim_lsp['hls'].setup(coq.lsp_ensure_capabilities({
-nvim_lsp['hls'].setup(({
-  settings = {
-    haskell = {
-      plugin = {
-        hlint = {
-          globalOn = false
-        }
-      }
-    }
-  },
-  on_attach = on_attach,
-}))
-
-EOF
+" Drag in lua code
+lua require('init')
 
 " ------------------------------------------------------------------------------
 " Basic settings
@@ -375,8 +340,8 @@ xm sp <Plug>VSurround)
 " [fzf]
 nnoremap <Space>o :GFiles<Enter>
 nnoremap <Space>O :Files<Enter>
-nnoremap <Space>f :Ag <C-R><C-W><Enter>
-vnoremap <Space>f y:Ag <C-R>"<Enter>
+nnoremap <Space>f :Rg <C-R><C-W><Enter>
+vnoremap <Space>f y:Rg <C-R>"<Enter>
 nnoremap <Space>k :Buffers<CR>
 
 " [tabular]
