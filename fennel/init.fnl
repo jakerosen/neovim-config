@@ -70,8 +70,9 @@
 
 (local on-attach
   (lambda [client bufNum]
+    (vim.cmd "augroup onAttachGroup\nautocmd!\naugroup END")
     ; Format on save
-    (vim.cmd "autocmd jakerosen BufWritePre *.hs lua vim.lsp.buf.formatting_sync(nil, 1000)")
+    (vim.cmd "autocmd onAttachGroup BufWritePre *.hs lua vim.lsp.buf.formatting_sync(nil, 1000)")
 
     (vim.cmd "highlight LspReference guifg=NONE guibg=#665c54 guisp=NONE gui=NONE cterm=NONE ctermfg=NONE ctermbg=59")
     (vim.cmd "highlight! link LspReferenceText LspReference")
@@ -87,14 +88,15 @@
     (vim.api.nvim_buf_set_keymap bufNum "n" "<down>" ":lua vim.diagnostic.goto_next()<CR>" { "noremap" true "silent" true })
 
     (set vim.bo.omnifunc "v:lua.vim.lsp.omnifunc")
-    (vim.cmd "autocmd jakerosen CursorMoved <buffer> lua require('init').onHover()")
+    (vim.cmd "autocmd onAttachGroup CursorMoved <buffer> lua require('init').onHover()")
 
     (status.on_attach client)
   )
 )
 
 (lsp.hls.setup
-  { "settings" {
+  { "cmd" ["haskell-language-server-wrapper" "--lsp" "-d" "-l" "/home/jake/hls.txt"]
+    "settings" {
       "haskell" {
         "formattingProvider" "ormolu"
         "plugin" {
@@ -130,7 +132,7 @@
       "<S-Tab>" (fn [fallback]
         (if (cmp.visible) (cmp.select_prev_item) (fallback))
       )
-      "<CR>" (cmp.mapping.confirm { "select" true })
+      "<CR>" (cmp.mapping.confirm { "select" false })
     }
     "sources" (cmp.config.sources [
       { "name" "nvim_lsp" }
